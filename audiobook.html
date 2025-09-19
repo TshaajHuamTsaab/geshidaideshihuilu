@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📖 语音金书 - 有声书</title>
+<style>
+body {margin:0;font-family:system-ui,sans-serif;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);color:#fff;text-align:center;padding:20px;}
+h1 {font-size:1.8rem;margin-bottom:10px;}
+#sentences {margin:20px auto;max-width:600px;text-align:left;line-height:1.6;background:rgba(255,255,255,0.1);padding:16px;border-radius:12px;overflow-y:auto;max-height:50vh;}
+.highlight {color:#FFD700;font-weight:bold;}
+.controls {margin-top:20px;}
+button {background:#2196F3;color:white;border:none;padding:10px 20px;margin:5px;font-size:16px;border-radius:8px;cursor:pointer;}
+button:hover {background:#1976D2;}
+</style>
+</head>
+<body>
+
+<div>
+<button id="backBtn">⬅ 返回书库</button>
+</div>
+<h1 id="book-title">📖 正在加载...</h1>
+<div id="sentences">加载内容中...</div>
+
+
+<div class="controls">
+  <button id="playBtn">▶ 播放</button>
+  <button id="pauseBtn">⏸ 暂停</button>
+  <button id="speedBtn">⚡ 加速</button>
+</div>
+
+<audio id="audio"></audio>
+
+<script>
+const backBtn = document.getElementById('backBtn');
+backBtn.onclick = ()=>{ window.location.href='library.html'; };
+
+const urlParams = new URLSearchParams(window.location.search);
+const file = urlParams.get("file") || "assets/book1.json";
+
+const audio = document.getElementById("audio");
+const playBtn = document.getElementById("playBtn");
+const pauseBtn = document.getElementById("pauseBtn");
+const speedBtn = document.getElementById("speedBtn");
+let speed = 1;
+
+fetch(file)
+.then(res => res.json())
+.then(data => {
+    document.getElementById("book-title").innerText = data.title;
+    const container = document.getElementById("sentences");
+    container.innerHTML = "";
+    
+    // 动态分页
+    const pageHeight = container.clientHeight - 20;
+    let currentPage = document.createElement("div");
+    currentPage.style.marginBottom = "10px";
+    container.appendChild(currentPage);
+    let currentHeight = 0;
+
+    data.sentences.forEach(sentenceText => {
+        const p = document.createElement("p");
+        p.innerText = sentenceText;
+        currentPage.appendChild(p);
+        if(currentPage.scrollHeight > pageHeight) {
+            currentPage.removeChild(p);
+            let newPage = document.createElement("div");
+            newPage.style.marginBottom = "10px";
+            newPage.appendChild(p);
+            container.appendChild(newPage);
+            currentPage = newPage;
+        }
+    });
+
+    audio.src = data.audio;
+})
+.catch(err => {
+    document.getElementById("sentences").innerText = "❌ 加载失败：" + err;
+});
+
+// 控制按钮
+playBtn.onclick = () => audio.play();
+pauseBtn.onclick = () => audio.pause();
+speedBtn.onclick = () => {
+    speed += 0.5;
+    if(speed > 3) speed = 0.5;
+    audio.playbackRate = speed;
+    speedBtn.innerText = `⚡ ${speed}x`;
+};
+
+// 滑动翻页
+const container = document.getElementById("sentences");
+let startX = 0;
+let pages = [];
+container.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+container.addEventListener("touchend", e => {
+    let endX = e.changedTouches[0].clientX;
+    if(pages.length === 0) pages = Array.from(container.children);
+    let currentIndex = pages.findIndex(p => p.style.display !== "none");
+    if(currentIndex === -1) currentIndex = 0;
+    if(endX - startX > 50 && currentIndex>0){ // 向右
+        pages[currentIndex].style.display = "none";
+        pages[currentIndex-1].style.display = "block";
+    } else if(startX - endX > 50 && currentIndex < pages.length-1){ // 向左
+        pages[currentIndex].style.display = "none";
+        pages[currentIndex+1].style.display = "block";
+    }
+});
+</script>
+
+</body>
+</html>

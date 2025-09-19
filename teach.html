@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加书籍内容 - 语言书籍阅读器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 90vh;
+        }
+        
+        header {
+            background: #4e54c8;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #4e54c8;
+            font-weight: bold;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 50px;
+            background: #6a11cb;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .btn:hover {
+            background: #4e54c8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-connect {
+            background: #2ecc71;
+        }
+        
+        .btn-connect:hover {
+            background: #27ae60;
+        }
+        
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .tutorial-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #444;
+        }
+        
+        .tutorial-section {
+            margin-bottom: 40px;
+        }
+        
+        .tutorial-section h2 {
+            color: #4e54c8;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tutorial-section h3 {
+            color: #6a11cb;
+            margin: 25px 0 15px;
+        }
+        
+        .tutorial-section p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .tutorial-section ul, .tutorial-section ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .tutorial-section li {
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+        
+        .code-comment {
+            color: #75715e;
+        }
+        
+        .code-tag {
+            color: #f92672;
+        }
+        
+        .code-attr {
+            color: #a6e22e;
+        }
+        
+        .code-value {
+            color: #e6db74;
+        }
+        
+        .example-box {
+            background: #f5f7ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #6a11cb;
+        }
+        
+        .example-title {
+            font-weight: bold;
+            color: #4e54c8;
+            margin-bottom: 15px;
+        }
+        
+        .book-cover-example {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .cover-sample {
+            width: 120px;
+            height: 160px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cover-1 {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        }
+        
+        .cover-2 {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .cover-3 {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .cover-4 {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .text-sample {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #6a11cb;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header-controls {
+                flex-wrap: wrap;
+            }
+            
+            header {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .logo-area h1 {
+                font-size: 1.2rem;
+            }
+            
+            .book-cover-example {
+                justify-content: center;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <div class="logo">LB</div>
+                <h1>添加书籍内容 - 教程</h1>
+            </div>
+            
+            <div class="header-controls">
+                <button class="btn btn-connect"><i class="fas fa-wifi"></i> 连接设备</button>
+            </div>
+            
+            <div class="user-area">
+                <div class="user-avatar">TU</div>
+                <span>教程模式</span>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="tutorial-content fade-in">
+                <div class="tutorial-section">
+                    <h2>如何向阅读器添加书籍内容</h2>
+                    <p>本教程将指导您如何向语言书籍阅读器添加新的书籍内容，包括文本和封面图片。</p>
+                </div>
+                
+                <div class="tutorial-section">
+                    <h2>1. 准备书籍内容</h2>
+                    <p>首先，您需要准备好要添加的书籍内容。可以是任何语言的文本，阅读器支持多种语言。</p>
+                    
+                    <div class="example-box">
+                        <div class="example-title">文本格式示例：</div>
+                        <div class="text-sample">
+                            <h3>第一章：开始学习</h3>
+                            <p>这是第一段文本内容。您可以在这里添加任何想要学习的内容。</p>
+                            <p>这是第二段内容。书籍内容应该按照章节和段落进行组织。</p>
+                            <p>每一页的内容不宜过长，建议在500-1000字左右。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial-section">
+                    <h2>2. 添加书籍封面</h2>
+                    <p>书籍封面可以使用图片链接或Base64编码的图像数据。以下是几种添加方式：</p>
+                    
+                    <h3>方法一：使用在线图片链接</h3>
+                    <div class="code-block">
+                        <span class="code-tag">var</span> bookCover = <span class="code-value">"https://example.com/path/to/your/image.jpg"</span>;
+                    </div>
+                    
+                    <h3>方法二：使用Base64编码图像</h3>
+                    <div class="code-block">
+                        <span class="code-tag">var</span> bookCover = <span class="code-value">"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBD..."</span>;
+                    </div>
+                    
+                    <h3>方法三：使用纯CSS创建简单封面</h3>
+                    <div class="code-block">
+                        <span class="code-comment">// 使用CSS渐变创建美观的书籍封面</span><br>
+                        .book-cover {<br>
+                        &nbsp;&nbsp;background: <span class="code-value">linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%)</span>;<br>
+                        &nbsp;&nbsp;border-radius: <span class="code-value">5px</span>;<br>
+                        &nbsp;&nbsp;color: <span class="code-value">white</span>;<br>
+                        &nbsp;&nbsp;text-align: <span class="code-value">center</span>;<br>
+                        &nbsp;&nbsp;padding: <span class="code-value">10px</span>;<br>
+                        }
+                    </div>
+                    
+                    <p>封面示例：</p>
+                    <div class="book-cover-example">
+                        <div class="cover-sample cover-1">英语语法</div>
+                        <div class="cover-sample cover-2">法语入门</div>
+                        <div class="cover-sample cover-3">日语教程</div>
+                        <div class="cover-sample cover-4">西班牙语</div>
+                    </div>
+                </div>
+                
+                <div class="tutorial-section">
+                    <h2>3. 书籍数据结构</h2>
+                    <p>每本书籍都使用JavaScript对象表示，包含以下属性：</p>
+                    
+                    <div class="code-block">
+                        <span class="code-tag">var</span> book = {<br>
+                        &nbsp;&nbsp;id: <span class="code-value">1</span>, <span class="code-comment">// 唯一标识符</span><br>
+                        &nbsp;&nbsp;title: <span class="code-value">"实用英语语法"</span>, <span class="code-comment">// 书名</span><br>
+                        &nbsp;&nbsp;language: <span class="code-value">"英语"</span>, <span class="code-comment">// 书籍语言</span><br>
+                        &nbsp;&nbsp;cover: <span class="code-value">"封面图片URL或Base64"</span>, <span class="code-comment">// 封面图片</span><br>
+                        &nbsp;&nbsp;lastRead: <span class="code-value">"2小时前"</span>, <span class="code-comment">// 最后阅读时间</span><br>
+                        &nbsp;&nbsp;content: [ <span class="code-comment">// 书籍内容，每页一个对象</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;page: <span class="code-value">1</span>, <span class="code-comment">// 页码</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chapter: <span class="code-value">"第一章: 名词"</span>, <span class="code-comment">// 章节标题</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text: <span class="code-value">"名词是表示人、事物、地点或抽象概念的名称的词..."</span> <span class="code-comment">// 页面文本</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;page: <span class="code-value">2</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chapter: <span class="code-value">"第一章: 名词"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text: <span class="code-value">"可数名词有单数和复数两种形式。例如：book（书，单数）→ books（书，复数）..."</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;]<br>
+                        };
+                    </div>
+                </div>
+                
+                <div class="tutorial-section">
+                    <h2>4. 添加书籍到阅读器</h2>
+                    <p>按照以下步骤将书籍添加到阅读器：</p>
+                    
+                    <p><span class="step-number">1</span> 准备书籍文本内容，按页面分割</p>
+                    <p><span class="step-number">2</span> 创建或获取书籍封面图片</p>
+                    <p><span class="step-number">3</span> 按照上述数据结构创建书籍对象</p>
+                    <p><span class="step-number">4</span> 将书籍对象添加到书籍数组</p>
+                    <p><span class="step-number">5</span> 调用渲染函数更新界面</p>
+                    
+                    <div class="code-block">
+                        <span class="code-comment">// 示例：添加新书籍到阅读器</span><br>
+                        <span class="code-tag">function</span> addNewBook(bookData) {<br>
+                        &nbsp;&nbsp;<span class="code-comment">// 1. 将书籍数据添加到数组</span><br>
+                        &nbsp;&nbsp;booksArray.push(bookData);<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-comment">// 2. 更新本地存储（如果需要持久化）</span><br>
+                        &nbsp;&nbsp;localStorage.setItem(<span class="code-value">'languageBooks'</span>, JSON.stringify(booksArray));<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-comment">// 3. 重新渲染书籍列表</span><br>
+                        &nbsp;&nbsp;renderBookList();<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-comment">// 4. 显示成功消息</span><br>
+                        &nbsp;&nbsp;showNotification(<span class="code-value">'书籍已成功添加！'</span>);<br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="tutorial-section">
+                    <h2>5. 文本格式化建议</h2>
+                    <p>为了获得最佳阅读体验，建议对文本进行以下格式化：</p>
+                    
+                    <ul>
+                        <li>每段不宜过长，适当分段</li>
+                        <li>使用标题区分章节</li>
+                        <li>重要概念可以使用<strong>粗体</strong>或<em>斜体</em>强调</li>
+                        <li>外文词汇可以使用<code>inline code</code>样式</li>
+                        <li>例句可以单独成段并缩进</li>
+                    </ul>
+                    
+                    <div class="example-box">
+                        <div class="example-title">格式化示例：</div>
+                        <div class="text-sample">
+                            <h3>第二章：动词时态</h3>
+                            <p>动词时态是表示动作发生时间的动词形式。英语中有12种主要时态。</p>
+                            
+                            <p><strong>现在简单时</strong>表示习惯性动作或普遍真理：</p>
+                            <p style="margin-left: 20px; font-style: italic;">I <u>study</u> English every day.（我每天学习英语。）</p>
+                            <p style="margin-left: 20px; font-style: italic;">The sun <u>rises</u> in the east.（太阳从东方升起。）</p>
+                            
+                            <p><strong>现在进行时</strong>表示正在进行的动作：</p>
+                            <p style="margin-left: 20px; font-style: italic;">I <u>am studying</u> English now.（我现在正在学习英语。）</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial-section">
+                    <h2>6. 多语言支持</h2>
+                    <p>阅读器支持多种语言，您可以为每种语言创建单独的书籍：</p>
+                    
+                    <ul>
+                        <li>英语学习材料</li>
+                        <li>法语教程</li>
+                        <li>日语教材</li>
+                        <li>西班牙语课程</li>
+                        <li>德语语法</li>
+                        <li>中文学习资源</li>
+                        <li>以及其他任何语言</li>
+                    </ul>
+                    
+                    <p>每种语言的书籍都可以有自己的特色封面和内容组织方式。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 示例代码：添加新书籍的函数
+            function addNewBook(bookData) {
+                // 在实际应用中，这里会将书籍添加到阅读器
+                console.log('添加新书籍:', bookData);
+                
+                // 显示成功消息
+                alert('书籍已成功添加！您可以在书库中查看。');
+            }
+            
+            // 示例：创建一个新的书籍对象
+            var newBook = {
+                id: Date.now(), // 使用时间戳作为唯一ID
+                title: "示例书籍",
+                language: "英语",
+                cover: "linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%)",
+                lastRead: "刚刚",
+                content: [
+                    {
+                        page: 1,
+                        chapter: "第一章: 开始",
+                        text: "这是第一页的内容。您可以在这里添加书籍的实际文本。"
+                    },
+                    {
+                        page: 2,
+                        chapter: "第一章: 开始",
+                        text: "这是第二页的内容。继续添加更多内容..."
+                    }
+                ]
+            };
+            
+            // 只是为了演示，实际应用中会在用户操作时调用
+            // addNewBook(newBook);
+        });
+    </script>
+</body>
+</html>

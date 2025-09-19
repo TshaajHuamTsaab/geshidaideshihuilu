@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多语言书籍阅读器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 90vh;
+        }
+        
+        header {
+            background: #4e54c8;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #4e54c8;
+            font-weight: bold;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 50px;
+            background: #6a11cb;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .btn:hover {
+            background: #4e54c8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-connect {
+            background: #2ecc71;
+        }
+        
+        .btn-connect:hover {
+            background: #27ae60;
+        }
+        
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .bookshelf {
+            width: 300px;
+            background: #f5f7ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-right: 20px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .bookshelf h2 {
+            color: #4e54c8;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.4rem;
+        }
+        
+        .book-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .book-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .book-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .book-item.active {
+            border-left: 5px solid #6a11cb;
+            background: #eef0ff;
+        }
+        
+        .book-cover {
+            width: 50px;
+            height: 60px;
+            background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 10px;
+            text-align: center;
+            padding: 5px;
+        }
+        
+        .book-info h3 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        
+        .book-info p {
+            font-size: 0.8rem;
+            color: #777;
+        }
+        
+        .reader {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .reader-header {
+            background: #f5f7ff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .reader-header h2 {
+            color: #4e54c8;
+            font-size: 1.3rem;
+        }
+        
+        .book-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #444;
+            position: relative;
+        }
+        
+        .page {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .page h3 {
+            color: #4e54c8;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .page p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        
+        .reader-controls {
+            background: #f5f7ff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+        }
+        
+        .playback-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #6a11cb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .control-btn:hover {
+            background: #4e54c8;
+            transform: scale(1.05);
+        }
+        
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .speed-control select {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            background: white;
+            font-weight: bold;
+        }
+        
+        .page-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .page-btn {
+            padding: 10px 20px;
+            background: #6a11cb;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .page-btn:hover {
+            background: #4e54c8;
+        }
+        
+        .device-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #4e54c8;
+            font-weight: bold;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4caf50;
+        }
+        
+        /* 设置面板 */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .settings-panel.active {
+            right: 0;
+        }
+        
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .settings-header h2 {
+            color: #4e54c8;
+        }
+        
+        .close-settings {
+            background: #eee;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close-settings:hover {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .user-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .change-avatar {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #4e54c8;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .profile-email {
+            color: #777;
+        }
+        
+        .settings-section {
+            margin-bottom: 25px;
+        }
+        
+        .settings-section h3 {
+            color: #4e54c8;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .phone-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .country-code {
+            width: 30%;
+        }
+        
+        .phone-number {
+            flex: 1;
+        }
+        
+        .save-btn {
+            background: #4e54c8;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .save-btn:hover {
+            background: #6a11cb;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .bookshelf {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+                max-height: 200px;
+            }
+            
+            .reader-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .header-controls {
+                flex-wrap: wrap;
+            }
+            
+            .settings-panel {
+                width: 85%;
+                right: -85%;
+            }
+            
+            header {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .logo-area h1 {
+                font-size: 1.2rem;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <div class="logo">LB</div>
+                <h1>语言书籍阅读器</h1>
+            </div>
+            
+            <div class="header-controls">
+                <button class="btn btn-connect"><i class="fas fa-wifi"></i> 连接设备</button>
+            </div>
+            
+            <div class="user-area" id="userSettings">
+                <div class="user-avatar">JS</div>
+                <span>用户设置</span>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="bookshelf">
+                <h2>我的书库</h2>
+                <div class="book-list">
+                    <div class="book-item active">
+                        <div class="https://i.postimg.cc/vTMfsWVf/image.jpg">《习惯的力量》</div>
+                        <div class="book-info">
+                            <h3>作者 （Charles Duhigg）</h3>
+                            <p>最后阅读: 2小时前</p>
+                        </div>
+                    </div>
+                    <div class="book-item">
+                        <div class="book-cover">法语入门</div>
+                        <div class="book-info">
+                            <h3>法语基础教程</h3>
+                            <p>最后阅读: 1天前</p>
+                        </div>
+                    </div>
+                    <div class="book-item">
+                        <div class="book-cover">日语学习</div>
+                        <div class="book-info">
+                            <h3>标准日本语</h3>
+                            <p>最后阅读: 3天前</p>
+                        </div>
+                    </div>
+                    <div class="book-item">
+                        <div class="book-cover">西班牙语</div>
+                        <div class="book-info">
+                            <h3>西班牙语速成</h3>
+                            <p>最后阅读: 1周前</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="reader">
+                <div class="reader-header">
+                    <h2>实用英语语法</h2>
+                    <div class="device-status">
+                        <div class="status-indicator"></div>
+                        <span>已连接手机</span>
+                    </div>
+                </div>
+                
+                <div class="book-content">
+                    <div class="page fade-in">
+                        <h3>第一章: 名词</h3>
+                        <p>名词是表示人、事物、地点或抽象概念的名称的词。在英语中，名词可以分为可数名词和不可数名词。</p>
+                        
+                        <p>可数名词有单数和复数两种形式。例如：book（书，单数）→ books（书，复数）。</p>
+                        
+                        <p>不可数名词没有复数形式，例如：water（水）、information（信息）、advice（建议）。</p>
+                        
+                        <p>名词的所有格表示所属关系，通常在名词后加 's 构成。例如：John's book（约翰的书）。</p>
+                    </div>
+                </div>
+                
+                <div class="reader-controls">
+                    <div class="playback-controls">
+                        <button class="control-btn"><i class="fas fa-step-backward"></i></button>
+                        <button class="control-btn"><i class="fas fa-play"></i></button>
+                        <button class="control-btn"><i class="fas fa-step-forward"></i></button>
+                        
+                        <div class="speed-control">
+                            <span>语速:</span>
+                            <select>
+                                <option>0.5x</option>
+                                <option>0.75x</option>
+                                <option selected>1.0x</option>
+                                <option>1.25x</option>
+                                <option>1.5x</option>
+                                <option>2.0x</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="page-controls">
+                        <button class="page-btn"><i class="fas fa-chevron-left"></i> 上一页</button>
+                        <span>第 1 页 / 共 120 页</span>
+                        <button class="page-btn">下一页 <i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置面板 -->
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h2>用户设置</h2>
+            <div class="close-settings" id="closeSettings">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+        
+        <div class="user-profile">
+            <div class="profile-avatar">
+                JS
+                <div class="change-avatar">
+                    <i class="fas fa-camera"></i>
+                </div>
+            </div>
+            <div class="profile-name">John Smith</div>
+            <div class="profile-email">john.smith@example.com</div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>个人信息</h3>
+            
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" value="John Smith">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">电子邮箱</label>
+                <input type="email" id="email" value="john.smith@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="gender">性别</label>
+                <select id="gender">
+                    <option>男</option>
+                    <option>女</option>
+                    <option>其他</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="birthday">生日</label>
+                <input type="date" id="birthday" value="1990-01-15">
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>联系方式</h3>
+            
+            <div class="form-group">
+                <label>手机号码</label>
+                <div class="phone-input">
+                    <select class="country-code">
+                        <option>+1 (美国)</option>
+                        <option>+44 (英国)</option>
+                        <option selected>+86 (中国)</option>
+                        <option>+81 (日本)</option>
+                        <option>+33 (法国)</option>
+                        <option>+34 (西班牙)</option>
+                        <option>+49 (德国)</option>
+                        <option>+82 (韩国)</option>
+                        <option>+7 (俄罗斯)</option>
+                        <option>+91 (印度)</option>
+                        <option>+95 (缅甸)</option>
+                    </select>
+                    <input type="tel" class="phone-number" value="13800138000">
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>阅读设置</h3>
+            
+            <div class="form-group">
+                <label for="fontSize">字体大小</label>
+                <select id="fontSize">
+                    <option>小</option>
+                    <option selected>中</option>
+                    <option>大</option>
+                    <option>超大</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="theme">主题</label>
+                <select id="theme">
+                    <option selected>浅色模式</option>
+                    <option>深色模式</option>
+                    <option>护眼模式</option>
+                    <option>夜间模式</option>
+                </select>
+            </div>
+        </div>
+        
+        <button class="save-btn">保存设置</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 模拟书籍数据
+            const books = document.querySelectorAll('.book-item');
+            const bookContent = document.querySelector('.book-content');
+            const pageTitle = document.querySelector('.reader-header h2');
+            const prevBtn = document.querySelector('.page-controls .page-btn:first-child');
+            const nextBtn = document.querySelector('.page-controls .page-btn:last-child');
+            const playBtn = document.querySelector('.playback-controls .control-btn:nth-child(2)');
+            const pageInfo = document.querySelector('.page-controls span');
+            
+            // 设置面板元素
+            const userSettings = document.getElementById('userSettings');
+            const settingsPanel = document.getElementById('settingsPanel');
+            const overlay = document.getElementById('overlay');
+            const closeSettings = document.getElementById('closeSettings');
+            
+            let currentPage = 1;
+            const totalPages = 120;
+            let isPlaying = false;
+            
+            // 书籍点击事件
+            books.forEach(book => {
+                book.addEventListener('click', function() {
+                    books.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const title = this.querySelector('h3').textContent;
+                    pageTitle.textContent = title;
+                    
+                    // 显示新内容（实际应用中会从服务器加载）
+                    bookContent.innerHTML = `
+                        <div class="page fade-in">
+                            <h3>${title} - 简介</h3>
+                            <p>您正在阅读 ${title}，这是一本优秀的语言学习教材，适合初学者和进阶学习者使用。</p>
+                            <p>本书包含丰富的例句和练习，帮助您快速掌握语言要点。</p>
+                            <p>点击播放按钮可以听朗读，使用速度控制可以调整朗读语速。</p>
+                        </div>
+                    `;
+                    
+                    currentPage = 1;
+                    updatePageInfo();
+                });
+            });
+            
+            // 翻页功能
+            prevBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updatePageContent();
+                    updatePageInfo();
+                }
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updatePageContent();
+                    updatePageInfo();
+                }
+            });
+            
+            // 播放/暂停功能
+            playBtn.addEventListener('click', function() {
+                isPlaying = !isPlaying;
+                const icon = playBtn.querySelector('i');
+                if (isPlaying) {
+                    icon.classList.remove('fa-play');
+                    icon.classList.add('fa-pause');
+                } else {
+                    icon.classList.remove('fa-pause');
+                    icon.classList.add('fa-play');
+                }
+            });
+            
+            // 打开设置面板
+            userSettings.addEventListener('click', function() {
+                settingsPanel.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // 关闭设置面板
+            closeSettings.addEventListener('click', closeSettingsPanel);
+            overlay.addEventListener('click', closeSettingsPanel);
+            
+            function closeSettingsPanel() {
+                settingsPanel.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+            
+            // 更新页面内容
+            function updatePageContent() {
+                bookContent.innerHTML = `
+                    <div class="page fade-in">
+                        <h3>第 ${currentPage} 页</h3>
+                        <p>这是《${pageTitle.textContent}》的第 ${currentPage} 页内容。</p>
+                        <p>此处显示实际的书籍内容。在实际应用中，这些内容将从服务器或本地文件加载。</p>
+                        <p>您可以点击播放按钮收听本页的朗读，使用控制按钮调整阅读进度。</p>
+                    </div>
+                `;
+            }
+            
+            // 更新页码信息
+            function updatePageInfo() {
+                pageInfo.textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>正倾听中</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #f4f4f4;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .book-title {
+      font-size: 2.8rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #00f260, #0575e6, #ff0080, #ff8c00);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientMove 6s ease infinite;
+      margin: 40px 0 20px 0;
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .project {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 20px;
+      margin: 15px auto;
+      border-radius: 16px;
+      width: 80%;
+      max-width: 700px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+    .project:hover { transform: scale(1.02); }
+    .button {
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      margin: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .play-btn {
+      background: #28a745;
+      color: white;
+      box-shadow: 0 4px 8px rgba(40,167,69,0.4);
+    }
+    .play-btn:hover { background: #218838; }
+    .stop-btn {
+      background: #dc3545;
+      color: white;
+      box-shadow: 0 4px 8px rgba(220,53,69,0.4);
+    }
+    .stop-btn:hover { background: #c82333; }
+    .text-container {
+      margin-top: 15px;
+      text-align: left;
+      line-height: 1.6;
+      color: #e0e0e0;
+      font-size: 1.1rem;
+    }
+    .sentence {
+      display: block;
+      margin-bottom: 6px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      transition: background 0.3s, color 0.3s;
+    }
+    .sentence.active {
+      background: rgba(40,167,69,0.3);
+      color: #00ff99;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!-- 返回按钮 -->
+<button class="back-btn" onclick="goBack()">⬅ 返回</button>
+
+<script>
+function goBack() {
+  if (document.referrer && document.referrer !== window.location.href) {
+    // 有来源页面 → 返回上一页
+    history.back();
+  } else {
+    // 没有来源（例如直接打开页面）→ 回到首页
+    window.location.href = "home.html"; 
+    // 把 "home.html" 改成你自己的首页路径
+  }
+}
+</script>
+
+<style>
+.back-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.back-btn:hover {
+  background: #1976D2;
+}
+</style>
+
+
+  <h1 class="book-title">人生的未来。</h1>
+
+  <!-- Project 1 -->
+  <div class="project" id="project1">
+    <h2>Project 1 - 人生苦短，事情阎良</h2>
+    <button class="button play-btn" onclick="playAudio(1)">▶ Play</button>
+    <button class="button stop-btn" onclick="stopAudio(1)">■ Stop</button>
+    <audio id="audio1" src="assets/audio1.mp3"></audio>
+
+    <div class="text-container" id="text1">
+      <span class="sentence">1️⃣ 有合同才算数，光说不管用 —— 没写下来，出了事没人认账。</span>
+      <span class="sentence">2️⃣ 发票就是凭证 —— 没有发票，商品或服务出了问题，维权成本会很高。</span>
+      <span class="sentence">3️⃣ 贷款利率要算清楚 —— 贷款和分期买东西，利息常常被包装成“服务费”。</span>
+      <span class="sentence">4️⃣ 个人信息不要随便给 —— 信息泄露可能导致诈骗和经济损失。</span>
+      <span class="sentence">5️⃣ 社交要留余地 —— 不要把话说死，留有余地才有回旋空间。</span>
+      <span class="sentence">6️⃣ 免费的东西要小心 —— 天上不会掉馅饼，常常是套路。</span>
+      <span class="sentence">7️⃣ 投资需谨慎 —— 高收益往往伴随高风险，别轻信“一夜暴富”。</span>
+      <span class="sentence">8️⃣ 遇事先冷静 —— 冲动做决定，后果可能更严重。</span>
+      <span class="sentence">9️⃣ 时间比金钱更宝贵 —— 不要浪费在无意义的争论上。</span>
+      <span class="sentence">🔟 健康最重要 —— 钱可以再赚，身体垮了就什么都没了。</span>
+    </div>
+</div>
+
+  <!-- Project 2: 未来必知与准备的10项深度知识 -->
+  <div class="project" id="project2">
+    <h2>Project 2 - 必准备的10项深度知识</h2>
+    <button class="button play-btn" onclick="playAudio(2)">▶ Play</button>
+    <button class="button stop-btn" onclick="stopAudio(2)">■ Stop</button>
+    <audio id="audio2" src="assets/audio2.mp3"></audio>
+
+    <div class="text-container" id="text2">
+      <span class="sentence">1️⃣ 人工智能与自动化 —— 必知：AI 将深度嵌入生活、工作和社会决策中。</span>
+      <span class="sentence">它不仅能做重复性工作，还能辅助决策和创造内容。</span>
+      <span class="sentence">准备：学习 AI、机器学习知识，熟悉 Python、R、TensorFlow 等工具，理解算法的局限与伦理影响。</span>
+      <span class="sentence">2️⃣ 信息安全与隐私保护 —— 必知：个人数据将是最重要的资产。</span>
+      <span class="sentence">网络攻击和数据泄露会直接影响生活与财产安全。</span>
+      <span class="sentence">准备：掌握密码管理、多因素认证、加密技术，识别网络钓鱼与社交工程攻击。</span>
+      <span class="sentence">3️⃣ 数字货币与区块链 —— 必知：数字货币和区块链将改变支付与金融方式。</span>
+      <span class="sentence">准备：理解比特币、以太坊原理，掌握钱包管理、智能合约操作与风险意识。</span>
+      <span class="sentence">...（此处省略，后面保持同样格式继续写完10条）</span>
+    <span class="sentence">4️⃣ 可持续发展与生态意识 —— 必知：气候变化、资源枯竭影响社会稳定与生活质量。</span>
+    <span class="sentence">准备：学习可再生能源、绿色生活方式，参与低碳行动与环保创新。</span>
+
+    <span class="sentence">5️⃣ 心理健康与情绪管理 —— 必知：快节奏与信息过载影响心理健康。</span>
+    <span class="sentence">准备：学习冥想、认知行为疗法、情绪管理技巧，培养自我认知与同理心。</span>
+
+    <span class="sentence">6️⃣ 跨学科与终身学习 —— 必知：未来需要跨领域知识与持续学习能力。</span>
+    <span class="sentence">准备：培养跨学科能力（科技+艺术+商业+人文），掌握快速学习与信息筛选技巧。</span>
+
+    <span class="sentence">7️⃣ 全球化与多文化理解 —— 必知：跨国交流与文化冲突更频繁。</span>
+    <span class="sentence">准备：学习多语言，理解不同文化背景，提升跨文化沟通与谈判能力。</span>
+
+    <span class="sentence">8️⃣ 创新思维与创造力 —— 必知：AI 可替代重复任务，但创新与想象力是人类优势。</span>
+    <span class="sentence">准备：练习设计思维、问题重构、快速原型，提升创造力与解决问题能力。</span>
+
+    <span class="sentence">9️⃣ 健康科技与长寿科学 —— 必知：生物科技、基因编辑与健康监测将改变医疗与寿命。</span>
+    <span class="sentence">准备：了解基因检测、营养学、智能健康设备，培养科学健康管理习惯。</span>
+
+    <span class="sentence">🔟 社会责任与伦理决策 —— 必知：技术进步伴随社会责任与伦理挑战。</span>
+    <span class="sentence">准备：学习伦理学、法律与社会责任案例，培养批判性思维与负责任的决策能力。</span>   
+    </div>
+  </div>
+
+  <!-- Project 3: 未来必知与准备的10项深度知识 -->
+  <div class="project" id="project3">
+  <h2>Project 3 - 诱惑管理与自我防护</h2>
+  <button class="button play-btn" onclick="playAudio(3)">▶ Play</button>
+  <button class="button stop-btn" onclick="stopAudio(3)">■ Stop</button>
+  <audio id="audio3" src="assets/audio3.mp3"></audio>
+
+  <div class="text-container" id="text3">
+    <span class="sentence">人性往往会在“诱惑”前动摇，无论是金钱、欲望、权力还是虚荣。</span>
+    <span class="sentence">想要避免被诱惑带走，需要既理解心理机制，又建立防护习惯。</span>
+    <span class="sentence">我给你几个层次的思考和做法：</span>
+    <span class="sentence">1. 认识诱惑的本质</span>
+    <span class="sentence">诱惑常常抓住人性弱点：例如对即时快感的渴望、对掌控的欲望、对他人认同的需求。</span>
+    <span class="sentence">诱惑并不总是恶：比如美食、享受、奖励，适度的“诱惑”能让人感受生活。</span>
+    <span class="sentence">但过度或错误的诱惑，会腐蚀意志。</span>
+    <span class="sentence">诱惑的力量来自“短期快感压过长期价值”：大脑多巴胺系统驱使人追求眼前满足，却忽视长期后果。</span>
+    <span class="sentence">2. 自我防护的心理策略</span>
+    <span class="sentence">自我觉察：学会在被诱惑吸引时停顿，问自己一句：“这是我真正想要的吗？后果会怎样？”</span>
+    <span class="sentence">延迟满足：训练自己不要立即回应冲动，比如数十秒、或推迟一天再决定。</span>
+    <span class="sentence">很多欲望在拖延后会自然消退。</span>
+    <span class="sentence">价值锚点：给自己设定一套“核心价值观”或人生目标，当诱惑来临时，用它来判断对错。</span>
+    <span class="sentence">替代策略：找到健康的替代方式，比如压力下想逃避，可以运动、阅读、创作，而不是沉溺于破坏性的诱惑。</span>
+    <span class="sentence">3. 环境与习惯的防护</span>
+    <span class="sentence">减少暴露：不要长期停留在充满诱惑的环境里（比如赌博场所、过度消费的社交圈）。</span>
+    <span class="sentence">建立正向圈子：和价值观稳定的人相处，互相提醒与守护。</span>
+    <span class="sentence">自我承诺：把目标公开化，或写下来并提醒自己（比如“我要保持自律”“不让短期欲望毁了长期幸福”）。</span>
+    <span class="sentence">小奖惩机制：当自己抵抗住诱惑时，给自己一点积极奖励；若没抵抗住，则做些“补救代价”，提醒自己下次更坚强。</span>
+    <span class="sentence">4. 精神层面的支撑</span>
+    <span class="sentence">宗教或哲学信念：很多人通过信仰、冥想、哲学反思，获得超越性的力量，帮助他们抵御诱惑。</span>
+    <span class="sentence">长期视角：常常想一想：10年后的自己，会因为今天的选择而骄傲，还是后悔？</span>
+    <span class="sentence">接纳而非压抑：诱惑是人性，不可能完全消失。</span>
+    <span class="sentence">关键不是强行否认，而是学会与欲望共处，并选择“驾驭”它。</span>
+    <span class="sentence"> 总结一句话：诱惑不可避免，但可以被管理。</span>
+    <span class="sentence">用“自觉 + 延迟 + 环境控制 + 价值观支撑”，就能大幅降低被诱惑绑架的风险。</span>
+  </div>
+</div>
+
+<div class="project" id="project4">
+  <h2>Project 4 - 世界事件与青年的启示</h2>
+  <button class="button play-btn" onclick="playAudio(4)">▶ Play</button>
+  <button class="button stop-btn" onclick="stopAudio(4)">■ Stop</button>
+  <audio id="audio4" src="assets/audio4.mp3"></audio>
+
+  <div class="text-container" id="text4">
+    <p>大家好，我是叔敖。年轻的我们要是生存不够谨慎，随时随地都会被社会淘汰！今天我们来看一下一些值得年轻人学习的事件吧！</p>
+
+    <h3>第一章 经济与生活</h3>
+    <p>无论哪个时代，经济政策都在悄然塑造每个人的日常。利率的升降决定了货币的价值，影响着就业、消费、房价与投资。经济看似是宏观的数字，实则与个人命运息息相关。年轻人要学会透过数据看到本质，不因短暂的繁荣而迷失，也不因一时的低谷而失望。</p>
+
+    <h3>第二章 社会与权利</h3>
+    <p>历史一再证明，社会的进步从来不是自然赐予，而是公民通过发声、争取和博弈换来的。公共政策、社会改革与权利保障，背后都是人与权力的互动。年轻人要明白，沉默与盲从只能延续现状，而觉醒与行动才可能改变未来。</p>
+
+    <h3>第三章 科技与未来</h3>
+    <p>科技的突破从未停歇。蒸汽机、电力、互联网、人工智能，每一次浪潮都重塑了社会的格局。掌握技术的人，引领未来；忽视技术的人，则容易被时代淘汰。年轻人需要理解：技术并非遥远的概念，而是生活中最切实的竞争力。</p>
+
+    <h3>第四章 国际与格局</h3>
+    <p>世界是一张紧密相连的网络，一国的选择往往影响他国的命运。货币政策、能源供给、贸易合作，都会跨越国界产生连锁效应。年轻人要培养国际视野，不局限于一隅之地。只有理解世界的联动，才能在变化中抓住机会，而不是被动承受冲击。</p>
+
+    <h3>第五章 环境与生存</h3>
+    <p>自然是人类赖以生存的根基。无论在哪个时代，环境与发展的矛盾都在考验社会的智慧。今天的抉择决定着明日的空气、水源与土地。年轻人要懂得，可持续并非空洞的口号，而是关乎自身与后代的现实。</p>
+
+    <h3>第六章 青年的使命</h3>
+    <p>经济告诉我们如何面对财富，社会告诉我们如何理解权利，科技告诉我们如何迎接未来，国际告诉我们如何看待格局，环境告诉我们如何珍惜生命的共同家园。年轻人若能从事件中抽取规律，从历史中汲取智慧，就能在复杂的世界里保持独立与清醒。</p>
+    <p>真正的清晰，不是随波逐流，而是敢于思考；真正的成熟，不是迎合潮流，而是坚持真理。</p>
+
+    <h3>总结</h3>
+    <p>世界在不断变化，但真相始终如一：经济左右着生活，社会塑造着权利，科技决定着未来，国际联动影响着格局，环境守护着生存。</p>
+    <p>年轻人若只停留在表面的热闹中，便会被动随波逐流；若能看清背后的逻辑，就能在动荡中保持清醒，在迷雾里找到方向。</p>
+    <p>真正的成长，是敢于质疑与思考；真正的力量，是在复杂世界中依然保持独立与坚守。</p>
+
+    <p>好啦，今天我们先说到这里。如果你倾读这篇文章时还没清醒，那建议您反复阅读，希望能在此有所收获！倘若您想要了解更多年轻人的未来和现实，请注册和支持此书，我们下次见！</p>
+  </div>
+</div>
+
+<div class="project" id="project6">
+  <h2>Project 6 - 韩信的故事与青年启示</h2>
+  <button class="button play-btn" onclick="playAudio(6)">▶ Play</button>
+  <button class="button stop-btn" onclick="stopAudio(6)">■ Stop</button>
+  <audio id="audio6" src="assets/audio6.mp3"></audio>
+
+  <div class="text-container" id="text6">
+    <p>大家好，我叫 叔敖。我不是预言家，也不是大师更不是什么传道人，我只是一个不断观察世界、思考人生的人。今天，我想把我从韩信的故事中总结出来的思考，分享给每一个渴望清醒与成长的年轻人。</p>
+
+    <h3>韩信的性格与起点</h3>
+    <p>韩信，少年时家境贫寒，却天资聪慧，忠厚善良。他善待他人，不计较个人得失，常常帮助弱者。然而，善良并不能保证安全，也不能替代谋略与自保意识。</p>
+    <p><strong>思考点：</strong>善良是力量，但不能盲目依赖它生存。</p>
+
+    <h3>韩信的军事才华</h3>
+    <p>韩信的战略眼光无人可比，他多次以少胜多、以弱胜强。他的军事才能让汉王刘邦极度倚重。如果只有才华而没有判断力，个人也可能被权力收买或牺牲。</p>
+    <p><strong>思考点：</strong>能力是通行证，但判断与策略才是生存护盾。</p>
+
+    <h3>韩信的善良极致</h3>
+    <p>他对部下宽厚，对朋友诚恳，甚至对敌人也有仁慈之心。他的善良让他赢得人心，但也让他在政治斗争中失去警觉。</p>
+    <p><strong>思考点：</strong>善良可以赢得信任，但无手段的善良容易被操纵。</p>
+
+    <h3>权力与危险</h3>
+    <p>汉王刘邦统一天下后，韩信位高权重。然而权力背后有复杂的政治算计。太后吕雉对韩信的影响力感到威胁，开始暗中排挤。</p>
+    <p><strong>思考点：</strong>权力和善良不一定共存，环境变化决定你是否安全。</p>
+
+    <h3>善良无手段的下场</h3>
+    <p>韩信过于相信人性，不懂权谋。最终，他在吕后的设计下被捕并处死。这是历史给每一个年轻人的警示：仅有善良而无智慧，是危险的。</p>
+    <p><strong>思考点：</strong>善良必须有底线，也必须有自我保护意识。</p>
+
+    <h3>智慧与策略的重要性</h3>
+    <p>韩信的军事智慧无与伦比，但在政治上缺乏策略。年轻人要明白：善良可以打动人，但智慧和手段可以保命、保身、保未来。</p>
+    <p><strong>思考点：</strong>善良 + 智慧 = 可持续的人生力量。</p>
+
+    <h3>做人不能愚蠢</h3>
+    <p>历史和现实都证明：过于单纯容易受伤。盲目信任、缺乏判断，会让善良成为弱点。年轻人要在善良中保持敏锐和警觉。</p>
+    <p><strong>思考点：</strong>善良不是软弱，愚蠢才是危险。</p>
+
+    <h3>从韩信学会清醒</h3>
+    <p>年轻人应学会：</p>
+    <ul>
+      <li>善待他人，但不盲目相信所有人；</li>
+      <li>发挥才能，但谨慎选择环境；</li>
+      <li>仁慈友善，但保护自己；</li>
+      <li>行事果敢，但策略先行。</li>
+    </ul>
+    <p><strong>思考点：</strong>清醒是对善良的保护，也是对人生的尊重。</p>
+
+    <h3>现代启示</h3>
+    <p>在现代社会，学校、职场、创业环境中，也充满“韩信式”的陷阱。善良的人容易被利用，但智谋的人能保护自己，也能影响他人。年轻人要把善良和智慧结合，才能走得长久。</p>
+    <p><strong>思考点：</strong>历史不是过去，而是未来的镜子。</p>
+
+    <h3>总结与青年箴言</h3>
+    <p>韩信告诉我们：</p>
+    <ul>
+      <li>善良是美德，但必须有底线和智慧；</li>
+      <li>才能是通行证，策略是护盾；</li>
+      <li>不盲从、不愚蠢，才能让善良持久发光。</li>
+    </ul>
+    <p>青年箴言：</p>
+    <ul>
+      <li>善良是光，智慧是盾；</li>
+      <li>行事仁厚，但心要清醒；</li>
+      <li>做一个温暖而不盲目的年轻人。</li>
+    </ul>
+
+    <h3>温馨提示</h3>
+    <p>在历史老祖宗用脑筋和血腥写下的江山中，我们怎能不读？请让韩信的故事成为你清醒、善良与智慧的镜子。</p>
+  </div>
+</div>
+
+<div class="project" id="project5">
+  <h2>Project 5 - 新一代简洁课程</h2>
+  <button class="button play-btn" onclick="playAudio(5)">▶ Play</button>
+  <button class="button stop-btn" onclick="stopAudio(5)">■ Stop</button>
+  <audio id="audio5" src="assets/audio5.mp3"></audio>
+
+  <div class="text-container" id="text5">
+    <p>大家好，我叫 叔敖。我不是预言家，也不是大师，我只是一个不断观察世界、思考人生的人。今天，我想把我从世界事件、社会规律、科技发展和自然环境中总结出来的思考，分享给每一个渴望清醒与成长的年轻人。</p>
+
+    <h3>1. 经济与生活</h3>
+    <p>经济政策并非遥远的数据，它决定着每个人的生活节奏。利率、通胀、投资与消费，看似专业术语，却关系到你手里的每一块钱。年轻人要学会透过数字看到规律，避免被表象的繁荣或恐慌蒙蔽。</p>
+
+    <h3>2. 社会与权利</h3>
+    <p>社会的进步从来不是自动发生的，而是公民通过发声、争取和行动换来的。年轻人要明白：沉默与盲从只会延续现状，而觉醒与思考才可能改变未来。理解社会的博弈规则，就是理解自己行动的力量。</p>
+
+    <h3>3. 科技与未来</h3>
+    <p>技术改变世界，也塑造每个人的机会。人工智能、数据、算力，每一次突破都是力量的重分配。年轻人需要学会理解工具背后的逻辑，掌握主动权，而不是被时代淘汰。</p>
+
+    <h3>4. 国际与格局</h3>
+    <p>世界是一张紧密联动的网络，一国的选择可能影响他国的命运。年轻人要拓展视野，看清全球互动背后的规律，才能在变化中抓住机会，而不是被动承受冲击。</p>
+
+    <h3>5. 环境与生存</h3>
+    <p>自然是人类赖以生存的根基。发展与环境的矛盾一直存在，今天的选择决定着明天的空气、水源与土地。年轻人要培养长远眼光，理解可持续发展的重要性，这是一份对自己与后代的责任。</p>
+
+    <h3>6. 青少年的使命</h3>
+    <p>经济告诉我们如何面对财富，社会告诉我们如何理解权利，科技告诉我们如何迎接未来，国际告诉我们如何看待格局，环境告诉我们如何守护生命。年轻人若能从事件中抽取规律，从历史中汲取智慧，就能在复杂的世界里保持独立与清醒。</p>
+
+    <h3>精准提醒</h3>
+    <p>如果读完还未触动心灵，我再直白一点：</p>
+    <p>真正的成长，不是随波逐流，而是敢于思考；</p>
+    <p>真正的力量，不是迎合潮流，而是保持独立、清醒与责任感。</p>
+    <p>世界在不断变化，但清醒的头脑、独立的意志与长远的眼光，是永远不会过时的护盾。它让你在动荡中不迷失，在喧嚣中不盲从，在迷雾中依然找到自己的方向。</p>
+
+    <h3>温馨提示</h3>
+    <p>你现在的思维决定了你的未来。请记住，你未来的模样，将由你今天的选择塑造。首先要做好当下的事情，一切才会顺利。</p>
+
+    <p>本书到此结束。感谢你的倾读与支持，我们下本书再见。</p>
+  </div>
+</div>
+
+<div class="project" id="project6">
+  <h2>Project 6 - 韩信的故事与青年启示</h2>
+  <button class="button play-btn" onclick="playAudio(6)">▶ Play</button>
+  <button class="button stop-btn" onclick="stopAudio(6)">■ Stop</button>
+  <audio id="audio6" src="assets/audio6.mp3"></audio>
+
+  <div class="text-container" id="text6">
+    <p>大家好，我叫 叔敖。我不是预言家，也不是大师更不是什么传道人，我只是一个不断观察世界、思考人生的人。今天，我想把我从韩信的故事中总结出来的思考，分享给每一个渴望清醒与成长的年轻人。</p>
+
+    <h3>韩信的性格与起点</h3>
+    <p>韩信，少年时家境贫寒，却天资聪慧，忠厚善良。他善待他人，不计较个人得失，常常帮助弱者。然而，善良并不能保证安全，也不能替代谋略与自保意识。</p>
+    <p><strong>思考点：</strong>善良是力量，但不能盲目依赖它生存。</p>
+
+    <h3>韩信的军事才华</h3>
+    <p>韩信的战略眼光无人可比，他多次以少胜多、以弱胜强。他的军事才能让汉王刘邦极度倚重。如果只有才华而没有判断力，个人也可能被权力收买或牺牲。</p>
+    <p><strong>思考点：</strong>能力是通行证，但判断与策略才是生存护盾。</p>
+
+    <h3>韩信的善良极致</h3>
+    <p>他对部下宽厚，对朋友诚恳，甚至对敌人也有仁慈之心。他的善良让他赢得人心，但也让他在政治斗争中失去警觉。</p>
+    <p><strong>思考点：</strong>善良可以赢得信任，但无手段的善良容易被操纵。</p>
+
+    <h3>权力与危险</h3>
+    <p>汉王刘邦统一天下后，韩信位高权重。然而权力背后有复杂的政治算计。太后吕雉对韩信的影响力感到威胁，开始暗中排挤。</p>
+    <p><strong>思考点：</strong>权力和善良不一定共存，环境变化决定你是否安全。</p>
+
+    <h3>善良无手段的下场</h3>
+    <p>韩信过于相信人性，不懂权谋。最终，他在吕后的设计下被捕并处死。这是历史给每一个年轻人的警示：仅有善良而无智慧，是危险的。</p>
+    <p><strong>思考点：</strong>善良必须有底线，也必须有自我保护意识。</p>
+
+    <h3>智慧与策略的重要性</h3>
+    <p>韩信的军事智慧无与伦比，但在政治上缺乏策略。年轻人要明白：善良可以打动人，但智慧和手段可以保命、保身、保未来。</p>
+    <p><strong>思考点：</strong>善良 + 智慧 = 可持续的人生力量。</p>
+
+    <h3>做人不能愚蠢</h3>
+    <p>历史和现实都证明：过于单纯容易受伤。盲目信任、缺乏判断，会让善良成为弱点。年轻人要在善良中保持敏锐和警觉。</p>
+    <p><strong>思考点：</strong>善良不是软弱，愚蠢才是危险。</p>
+
+    <h3>从韩信学会清醒</h3>
+    <p>年轻人应学会：</p>
+    <ul>
+      <li>善待他人，但不盲目相信所有人；</li>
+      <li>发挥才能，但谨慎选择环境；</li>
+      <li>仁慈友善，但保护自己；</li>
+      <li>行事果敢，但策略先行。</li>
+    </ul>
+    <p><strong>思考点：</strong>清醒是对善良的保护，也是对人生的尊重。</p>
+
+    <h3>现代启示</h3>
+    <p>在现代社会，学校、职场、创业环境中，也充满“韩信式”的陷阱。善良的人容易被利用，但智谋的人能保护自己，也能影响他人。年轻人要把善良和智慧结合，才能走得长久。</p>
+    <p><strong>思考点：</strong>历史不是过去，而是未来的镜子。</p>
+
+    <h3>总结与青年箴言</h3>
+    <p>韩信告诉我们：</p>
+    <ul>
+      <li>善良是美德，但必须有底线和智慧；</li>
+      <li>才能是通行证，策略是护盾；</li>
+      <li>不盲从、不愚蠢，才能让善良持久发光。</li>
+    </ul>
+    <p>青年箴言：</p>
+    <ul>
+      <li>善良是光，智慧是盾；</li>
+      <li>行事仁厚，但心要清醒；</li>
+      <li>做一个温暖而不盲目的年轻人。</li>
+    </ul>
+
+    <h3>温馨提示</h3>
+    <p>在历史老祖宗用脑筋和血腥写下的江山中，我们怎能不读？请让韩信的故事成为你清醒、善良与智慧的镜子。</p>
+  </div>
+</div>
+
+  <script>
+    let currentAudio = null;
+    let highlightTimers = [];
+
+    function playAudio(projectNum) {
+      stopAll();
+
+      const audio = document.getElementById("audio" + projectNum);
+      const container = document.getElementById("text" + projectNum);
+      const sentences = container.querySelectorAll(".sentence");
+
+      currentAudio = audio;
+      audio.play();
+
+      audio.onloadedmetadata = () => {
+        const duration = audio.duration;
+        const perSentence = duration / sentences.length;
+
+        sentences.forEach((s, i) => {
+          const timer = setTimeout(() => {
+            sentences.forEach(s => s.classList.remove("active"));
+            sentences[i].classList.add("active");
+          }, perSentence * i * 1000);
+          highlightTimers.push(timer);
+        });
+      };
+
+      audio.onended = () => stopAudio(projectNum);
+    }
+
+    function stopAudio(projectNum) {
+      const audio = document.getElementById("audio" + projectNum);
+      const container = document.getElementById("text" + projectNum);
+      const sentences = container.querySelectorAll(".sentence");
+
+      audio.pause();
+      audio.currentTime = 0;
+      sentences.forEach(s => s.classList.remove("active"));
+
+      highlightTimers.forEach(timer => clearTimeout(timer));
+      highlightTimers = [];
+      currentAudio = null;
+    }
+
+    function stopAll() {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+      document.querySelectorAll(".sentence").forEach(s => s.classList.remove("active"));
+      highlightTimers.forEach(timer => clearTimeout(timer));
+      highlightTimers = [];
+    }
+  </script>
+
+</body>
+</html>
