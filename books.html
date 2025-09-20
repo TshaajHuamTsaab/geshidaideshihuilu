@@ -85,45 +85,28 @@
       color: #00ff99;
       font-weight: bold;
     }
+    .back-btn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      background: #2196F3;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .back-btn:hover {
+      background: #1976D2;
+    }
   </style>
 </head>
 <body>
   <!-- 返回按钮 -->
-<button class="back-btn" onclick="goBack()">⬅ 返回</button>
-
-<script>
-function goBack() {
-  if (document.referrer && document.referrer !== window.location.href) {
-    // 有来源页面 → 返回上一页
-    history.back();
-  } else {
-    // 没有来源（例如直接打开页面）→ 回到首页
-    window.location.href = "home.html"; 
-    // 把 "home.html" 改成你自己的首页路径
-  }
-}
-</script>
-
-<style>
-.back-btn {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  background: #2196F3;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  z-index: 9999;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
-.back-btn:hover {
-  background: #1976D2;
-}
-</style>
-
+  <button class="back-btn" onclick="goBack()">⬅ 返回</button>
 
   <h1 class="book-title">人生的未来。</h1>
 
@@ -146,9 +129,9 @@ function goBack() {
       <span class="sentence">9️⃣ 时间比金钱更宝贵 —— 不要浪费在无意义的争论上。</span>
       <span class="sentence">🔟 健康最重要 —— 钱可以再赚，身体垮了就什么都没了。</span>
     </div>
-</div>
+  </div>
 
-  <!-- Project 2: 未来必知与准备的10项深度知识 -->
+   <!-- Project 2: 未来必知与准备的10项深度知识 -->
   <div class="project" id="project2">
     <h2>Project 2 - 必准备的10项深度知识</h2>
     <button class="button play-btn" onclick="playAudio(2)">▶ Play</button>
@@ -526,11 +509,18 @@ function goBack() {
 
   <script>
     let currentAudio = null;
-    let highlightTimers = [];
+    let highlightRequest = null;
+
+    function goBack() {
+      if (document.referrer && document.referrer !== window.location.href) {
+        history.back();
+      } else {
+        window.location.href = "home.html";
+      }
+    }
 
     function playAudio(projectNum) {
       stopAll();
-
       const audio = document.getElementById("audio" + projectNum);
       const container = document.getElementById("text" + projectNum);
       const sentences = container.querySelectorAll(".sentence");
@@ -538,18 +528,17 @@ function goBack() {
       currentAudio = audio;
       audio.play();
 
-      audio.onloadedmetadata = () => {
-        const duration = audio.duration;
-        const perSentence = duration / sentences.length;
-
-        sentences.forEach((s, i) => {
-          const timer = setTimeout(() => {
-            sentences.forEach(s => s.classList.remove("active"));
-            sentences[i].classList.add("active");
-          }, perSentence * i * 1000);
-          highlightTimers.push(timer);
-        });
-      };
+      function highlight() {
+        if (!audio.paused && audio.duration) {
+          const duration = audio.duration;
+          const currentTime = audio.currentTime;
+          const perSentence = duration / sentences.length;
+          const index = Math.floor(currentTime / perSentence);
+          sentences.forEach((s, i) => s.classList.toggle("active", i === index));
+          highlightRequest = requestAnimationFrame(highlight);
+        }
+      }
+      highlightRequest = requestAnimationFrame(highlight);
 
       audio.onended = () => stopAudio(projectNum);
     }
@@ -563,8 +552,8 @@ function goBack() {
       audio.currentTime = 0;
       sentences.forEach(s => s.classList.remove("active"));
 
-      highlightTimers.forEach(timer => clearTimeout(timer));
-      highlightTimers = [];
+      if (highlightRequest) cancelAnimationFrame(highlightRequest);
+      highlightRequest = null;
       currentAudio = null;
     }
 
@@ -574,8 +563,8 @@ function goBack() {
         currentAudio.currentTime = 0;
       }
       document.querySelectorAll(".sentence").forEach(s => s.classList.remove("active"));
-      highlightTimers.forEach(timer => clearTimeout(timer));
-      highlightTimers = [];
+      if (highlightRequest) cancelAnimationFrame(highlightRequest);
+      highlightRequest = null;
     }
   </script>
 
